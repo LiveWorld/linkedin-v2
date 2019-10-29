@@ -33,7 +33,7 @@ module LinkedIn
     def shares(options = {})
       urn = options.delete(:urn)
       path = "/shares?q=owners&owners=#{urn}"
-      get(path, options)
+      LinkedIn::APICollection.new(get(path, options), @connection)
     end
 
     # Retrieve Share by ID

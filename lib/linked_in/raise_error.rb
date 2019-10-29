@@ -13,6 +13,8 @@ module LinkedIn
         raise LinkedIn::AccessDeniedError.new(data), "(#{data.status}): #{data.message}"
       when 404
         raise LinkedIn::NotFoundError.new(data), "(#{data.status}): #{data.message}"
+      when 416
+        raise LinkedIn::RangeNotSatisfiable.new(data), "(#{data.status}): #{data.message}"
       when 500
         raise LinkedIn::InformLinkedInError.new(data), "LinkedIn had an internal error. (#{data.status}): #{data.message}"
       when 502..504

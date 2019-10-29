@@ -39,6 +39,9 @@ require 'linked_in/media'
 # It composes in all of the endpoints
 require "linked_in/api"
 
+# Represents a collection of data from an API response
+require "linked_in/api_collection"
+
 module LinkedIn
   @config = Configuration.new
 
