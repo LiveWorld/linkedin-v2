@@ -15,7 +15,15 @@ module LinkedIn
     end
 
     def next_page
+      return nil unless is_pageable? && next_page_url
       response = connection.get(next_page_url)
+      results = Mash.from_json(response.body)
+      LinkedIn::APICollection.new(results, connection)
+    end
+
+    def previous_page
+      return nil unless is_pageable? && previous_page_url
+      response = connection.get(previous_page_url)
       results = Mash.from_json(response.body)
       LinkedIn::APICollection.new(results, connection)
     end
@@ -26,6 +34,10 @@ module LinkedIn
 
     def total
       paging.dig('total')
+    end
+
+    def is_pageable?
+      total > count
     end
 
     def next_page_url
