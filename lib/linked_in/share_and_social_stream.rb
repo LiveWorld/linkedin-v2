@@ -130,7 +130,7 @@ module LinkedIn
     def comments(options = {})
       urn = options.delete(:urn)
       path = "/socialActions/#{urn}/comments"
-      get(path, options)
+      LinkedIn::APICollection.new(get(path, options), @connection)
     end
 
     # Adds a comment to a specific post.
