@@ -33,3 +33,23 @@ module LinkedIn
     end
   end
 end
+
+module Faraday
+  module NestedParamsEncoder
+    def self.escape(arg)
+      arg
+    end
+  end
+  module FlatParamsEncoder
+    def self.escape(arg)
+      ap arg
+      # When retrieving UGC posts - the urn must be encoded, but not the enclosing List - ex: "List({encoded_urn})"
+      if arg.starts_with?("List(")
+        org = arg.split('(')[1].split(')')[0]
+        org = CGI::escape(org)
+        arg = "List(#{org})"
+      end
+      arg
+    end
+  end
+end

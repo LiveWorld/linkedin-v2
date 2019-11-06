@@ -54,6 +54,7 @@ module LinkedIn
     def_delegators :@communications, :send_message
 
     def_delegators :@share_and_social_stream, :shares,
+                                              :ugc_posts,
                                               :share,
                                               :likes,
                                               :like,

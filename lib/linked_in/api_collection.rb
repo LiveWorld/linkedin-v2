@@ -43,6 +43,12 @@ module LinkedIn
     def next_page_url
       next_page_link = paging.dig('links')&.select{ |link| link['rel'] == 'next' }
       next_page_link&.dig(0, 'href')
+      # There's some odd behavior with pagination - sometimes the API doesn't return a full page of results
+      # For example, we request a count of 3 for page 2, but only 2 results are returned...
+
+      # TODO: extract start param from link and ...
+      # return nil unless start < total
+      # start param of next link should be less than the total otherwise we're making an unneccesary API call
     end
 
     def previous_page_url
