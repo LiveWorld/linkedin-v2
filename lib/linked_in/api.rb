@@ -11,8 +11,8 @@ module LinkedIn
       @connection =
         LinkedIn::Connection.new params: default_params, headers: default_headers do |conn|
         conn.request :multipart
-        conn.adapter Faraday.default_adapter
       end
+      @connection.adapter Faraday.default_adapter
 
       initialize_endpoints
     end
