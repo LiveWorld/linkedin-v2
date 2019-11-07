@@ -8,11 +8,20 @@ module LinkedIn
       verify_access_token!(access_token)
       @access_token = access_token
 
-      @connection =
-        LinkedIn::Connection.new params: default_params, headers: default_headers do |conn|
+      # https://docs.microsoft.com/en-us/linkedin/shared/api-guide/concepts/protocol-version
+      # Protocol version 1.0.0
+      @connection = LinkedIn::Connection.new params: default_params, headers: default_headers do |conn|
         conn.request :multipart
+        conn.adapter Faraday.default_adapter
       end
-      @connection.adapter Faraday.default_adapter
+
+      # Protocol version 2.0.0
+      # Calls will eventually need to be migrated to v2.0 as v1 is apparently going to be deprecated soon
+      # UGCPosts use v2 exclusively - this requires certain params to be URL encoded (URNS especially) ... check the docs, it gets tricky...
+      @connection_v2 = LinkedIn::Connection.new params: default_params, headers: protocol_v2_headers do |conn|
+        conn.request :multipart
+        conn.adapter Faraday.default_adapter
+      end
 
       initialize_endpoints
     end
@@ -54,7 +63,6 @@ module LinkedIn
     def_delegators :@communications, :send_message
 
     def_delegators :@share_and_social_stream, :shares,
-                                              :ugc_posts,
                                               :share,
                                               :likes,
                                               :like,
@@ -68,6 +76,8 @@ module LinkedIn
     def_delegators :@media, :summary,
                             :upload
 
+    def_delegators :@ugc_posts, :ugc_posts
+
     private ##############################################################
 
     def initialize_endpoints
@@ -78,6 +88,8 @@ module LinkedIn
       @communications = LinkedIn::Communications.new(@connection)
       @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection)
       @media = LinkedIn::Media.new(@connection)
+      # UGCPosts requires Protocol v2
+      @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 
@@ -90,7 +102,11 @@ module LinkedIn
 
     def default_headers
       # https://developer.linkedin.com/documents/api-requests-json
-      return {"x-li-format" => "json", "Authorization" => "Bearer #{@access_token.token}"}
+      { "x-li-format" => "json", "Authorization" => "Bearer #{@access_token.token}" }
+    end
+
+    def protocol_v2_headers
+      default_headers.merge({ "X-RestLi-Protocol-Version" => "2.0.0" })
     end
 
     def verify_access_token!(access_token)

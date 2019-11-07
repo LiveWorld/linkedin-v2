@@ -36,14 +36,6 @@ module LinkedIn
       LinkedIn::APICollection.new(get(path, options), @connection)
     end
 
-    # GET https://api.linkedin.com/v2/ugcPosts?authors=List%28urn%3Ali%3Aorganization%3A11163215%29&q=authors
-
-    def ugc_posts(options = {})
-      urn = options.delete(:urn)
-      path = "/ugcPosts?q=author&authors=List(#{CGI::escape(urn)})"
-      LinkedIn::APICollection.new(get(path, options), @connection)
-    end
-
     # Retrieve Share by ID
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api#look-up-share-by-id

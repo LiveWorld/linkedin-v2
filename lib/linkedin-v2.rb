@@ -33,6 +33,7 @@ require "linked_in/search"
 require "linked_in/organizations"
 require "linked_in/communications"
 require "linked_in/share_and_social_stream"
+require "linked_in/ugc_posts"
 require 'linked_in/media'
 
 # The primary API object that makes requests.
