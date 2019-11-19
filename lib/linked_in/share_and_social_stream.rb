@@ -161,6 +161,17 @@ module LinkedIn
       post(path, MultiJson.dump(body), 'Content-Type' => 'application/json')
     end
 
+    def delete_comment(options = {})
+      urn = options.delete(:urn)
+      actor = options.delete(:actor)
+      comment_id = options.delete(:comment_id)
+
+      # LinkedIn is ignoring body at the moment, thus actor has to be part of query string
+      path = "/socialActions/#{urn}/comments/#{comment_id}?actor=#{actor}"
+
+      delete(path, nil, 'Content-Type' => 'application/json')
+    end
+
     # Migrate from Update Keys to Share URNs
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api#migrate-from-update-keys-to-share-urns
