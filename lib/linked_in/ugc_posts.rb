@@ -9,6 +9,10 @@ module LinkedIn
       LinkedIn::APICollection.new(get(path, options), @connection)
     end
 
+    def delete_ugc_post(options = {})
+      urn = CGI.escape options.delete(:urn)
+      path = "/ugcPosts/#{urn}"
+      delete(path)
+    end
   end
-
 end
