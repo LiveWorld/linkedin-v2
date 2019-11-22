@@ -12,16 +12,16 @@ module LinkedIn
       # Protocol version 1.0.0
       @connection = LinkedIn::Connection.new params: default_params, headers: default_headers do |conn|
         conn.request :multipart
-        conn.adapter Faraday.default_adapter
       end
+      @connection.adapter Faraday.default_adapter
 
       # Protocol version 2.0.0
       # Calls will eventually need to be migrated to v2.0 as v1 is apparently going to be deprecated soon
       # UGCPosts use v2 exclusively - this requires certain params to be URL encoded (URNS especially) ... check the docs, it gets tricky...
       @connection_v2 = LinkedIn::Connection.new params: default_params, headers: protocol_v2_headers do |conn|
         conn.request :multipart
-        conn.adapter Faraday.default_adapter
       end
+      @connection_v2.adapter Faraday.default_adapter
 
       initialize_endpoints
     end
@@ -71,12 +71,14 @@ module LinkedIn
                                               :comment,
                                               :get_share,
                                               :get_social_actions,
+                                              :delete_comment
                                               :migrate_update_keys
 
     def_delegators :@media, :summary,
                             :upload
 
     def_delegators :@ugc_posts, :ugc_posts,
+                                :delete_ugc_post,
                                 :ugc_post
 
     private ##############################################################
