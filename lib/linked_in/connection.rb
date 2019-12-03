@@ -37,9 +37,9 @@ end
 module Faraday
   module FlatParamsEncoder
     def self.escape(arg)
-      ap arg
       # When retrieving UGC posts - the urn must be encoded, but not the enclosing List - ex: "List({encoded_urn})"
-      # Currently this only properly handles a single URN ... will need to be modified to handle multiple URNs if needed
+      # Currently this only properly handles a single URN ... the LinkedIn API only supports a single URN in the List
+      # If LinkedIn changes this, we will need to mdify this to handle multiple URNs
       if arg.starts_with?("List(")
         org = arg.split('(')[1].split(')')[0]
         org = CGI::escape(org)
