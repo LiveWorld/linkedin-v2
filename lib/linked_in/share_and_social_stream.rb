@@ -70,6 +70,26 @@ module LinkedIn
       post(path, MultiJson.dump(defaults.merge(options)), 'Content-Type' => 'application/json')
     end
 
+    def update_share(share_urn, text:, annotations: [])
+      path = "/shares/#{share_urn}"
+      options = {
+        patch: {
+          '$set': {
+            text: {
+              annotations: annotations,
+              text: text
+            }
+          }
+        }
+      }
+      post(path, MultiJson.dump(options), 'Content-Type' => 'application/json')
+    end
+
+    def delete_share(share_urn)
+      path = "/shares/#{share_urn}"
+      delete(path, nil, 'Content-Type' => 'application/json')
+    end
+
     # Retrieve a Summary of Social Actions
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/network-update-social-actions#retrieve-a-summary-of-social-actions

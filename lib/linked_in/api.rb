@@ -64,6 +64,8 @@ module LinkedIn
 
     def_delegators :@share_and_social_stream, :shares,
                                               :share,
+                                              :update_share,
+                                              :delete_share,
                                               :likes,
                                               :like,
                                               :unlike,
