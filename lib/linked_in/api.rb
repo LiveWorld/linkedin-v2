@@ -96,7 +96,7 @@ module LinkedIn
       @organizations = LinkedIn::Organizations.new(@connection)
       @communications = LinkedIn::Communications.new(@connection)
       @assets = LinkedIn::Assets.new(@connection_v2)
-      @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection_v2)
+      @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection)
       @media = LinkedIn::Media.new(@connection)
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)

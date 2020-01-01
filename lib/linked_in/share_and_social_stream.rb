@@ -72,7 +72,6 @@ module LinkedIn
       if images
         assets_api = Assets.new(@connection)
         assets = images.map do |image|
-          #byebug
           { entity: assets_api.upload_image(options[:owner], image) }
         end
         options[:content] ||= {}
