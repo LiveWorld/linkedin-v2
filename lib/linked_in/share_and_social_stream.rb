@@ -67,6 +67,18 @@ module LinkedIn
           }
         }
       }
+
+      images = options.delete(:images)
+      if images
+        assets_api = Assets.new(@connection)
+        assets = images.map do |image|
+          #byebug
+          { entity: assets_api.upload_image(options[:owner], image) }
+        end
+        options[:content] ||= {}
+        options[:content][:contentEntities] = assets
+        options[:content][:shareMediaCategory] = 'IMAGE'
+      end
       post(path, MultiJson.dump(defaults.merge(options)), 'Content-Type' => 'application/json')
     end
 
@@ -94,7 +106,7 @@ module LinkedIn
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/network-update-social-actions#retrieve-a-summary-of-social-actions
     #
-    def get_social_actions share_urns
+    def get_social_actions(share_urns)
       path = '/socialActions'
       get(path, ids: share_urns)
     end

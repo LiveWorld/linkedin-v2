@@ -62,6 +62,10 @@ module LinkedIn
 
     def_delegators :@communications, :send_message
 
+    def_delegators :@assets, :register_upload,
+                             :upload_asset,
+                             :upload_image
+
     def_delegators :@share_and_social_stream, :shares,
                                               :share,
                                               :update_share,
@@ -83,7 +87,7 @@ module LinkedIn
                                 :delete_ugc_post,
                                 :ugc_post
 
-    private ##############################################################
+    private
 
     def initialize_endpoints
       @jobs = LinkedIn::Jobs.new(@connection)
@@ -91,7 +95,8 @@ module LinkedIn
       @search = LinkedIn::Search.new(@connection)
       @organizations = LinkedIn::Organizations.new(@connection)
       @communications = LinkedIn::Communications.new(@connection)
-      @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection)
+      @assets = LinkedIn::Assets.new(@connection_v2)
+      @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection_v2)
       @media = LinkedIn::Media.new(@connection)
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
