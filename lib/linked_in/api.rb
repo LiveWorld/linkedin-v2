@@ -81,6 +81,10 @@ module LinkedIn
                                 :delete_ugc_post,
                                 :ugc_post
 
+
+    def_delegators :@ads, :ad_direct_sponsored_contents
+
+
     private ##############################################################
 
     def initialize_endpoints
@@ -93,6 +97,7 @@ module LinkedIn
       @media = LinkedIn::Media.new(@connection)
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
+      @ads = LinkedIn::Ads.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 

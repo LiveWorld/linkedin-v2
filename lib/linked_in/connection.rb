@@ -39,11 +39,15 @@ module Faraday
     def self.escape(arg)
       # When retrieving UGC posts - the urn must be encoded, but not the enclosing List - ex: "List({encoded_urn})"
       # Currently this only properly handles a single URN ... the LinkedIn API only supports a single URN in the List
-      # If LinkedIn changes this, we will need to mdify this to handle multiple URNs
+      # If LinkedIn changes this, we will need to modify this to handle multiple URNs
       if arg.starts_with?("List(")
         org = arg.split('(')[1].split(')')[0]
         org = CGI::escape(org)
         arg = "List(#{org})"
+      end
+      # Encode any raw URNs as required with Protocol v2 - v1 calls still work with encoded URNs, so this is backwards compatible
+      if arg.starts_with?('urn:li')
+        arg = CGI::escape(arg)
       end
       arg
     end
