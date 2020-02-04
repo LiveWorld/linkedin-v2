@@ -32,6 +32,9 @@ module LinkedIn
   # Raised when LinkedIn returns a 416 status code during an API request
   class RangeNotSatisfiable < LinkedIn::Error; end
 
+  # Raised when LinkedIn returns a 429.
+  class RateLimit < LinkedIn::Error; end
+
   # Raised when LinkedIn returns a 500 status code during an API
   # request.
   class InformLinkedInError < LinkedIn::Error; end
