@@ -34,6 +34,7 @@ module LinkedIn
     #                        :job_suggestions,
     #                        :add_job_bookmark
 
+    # these appear to be old v1 endpoints
     def_delegators :@people, :profile,
                              :skills,
                              :connections,
@@ -84,6 +85,9 @@ module LinkedIn
 
     def_delegators :@ads, :ad_direct_sponsored_contents
 
+    # V2 API Profile API - requires Protocol v2 headers
+    def_delegators :@profile, :people
+
 
     private ##############################################################
 
@@ -98,6 +102,7 @@ module LinkedIn
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
       @ads = LinkedIn::Ads.new(@connection_v2)
+      @profile = LinkedIn::Profile.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 

@@ -17,9 +17,10 @@ module LinkedIn
       # the same param to certain endpoints (like the search API).
       self.options.params_encoder = ::Faraday::FlatParamsEncoder
 
-#      logger = Logger.new $stderr
-#      logger.level = Logger::DEBUG
-#      self.response :logger, logger
+      # Uncomment this for spammy logs - this is sometimes helpful to debug requests
+      # logger = Logger.new $stderr
+      # logger.level = Logger::DEBUG
+      # self.response :logger, logger
 
       self.response :linkedin_raise_error
     end
@@ -40,11 +41,16 @@ module Faraday
       # When retrieving UGC posts - the urn must be encoded, but not the enclosing List - ex: "List({encoded_urn})"
       # Currently this only properly handles a single URN ... the LinkedIn API only supports a single URN in the List
       # If LinkedIn changes this, we will need to modify this to handle multiple URNs
+
+      # Don't encode a List of bulk people ids - see Profile#people
+      return arg if arg.starts_with?("List((id:")
+
       if arg.starts_with?("List(")
         org = arg.split('(')[1].split(')')[0]
         org = CGI::escape(org)
         arg = "List(#{org})"
       end
+
       # Encode any raw URNs as required with Protocol v2 - v1 calls still work with encoded URNs, so this is backwards compatible
       if arg.starts_with?('urn:li')
         arg = CGI::escape(arg)

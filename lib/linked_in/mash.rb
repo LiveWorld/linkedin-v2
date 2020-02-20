@@ -39,6 +39,13 @@ module LinkedIn
     # overload the convert_key mash method so that the LinkedIn
     # keys are made a little more ruby-ish
     def convert_key(key)
+      # Some LinkedIn person ids contain '-'
+      # Don't underscore keys containing an id as this may corrupt the id
+      # This operation isn't reversible ...
+      # "HuTQUpucZ-".underscore #=> "hu_tq_upuc_z_"
+      # "hu_tq_upuc_z_".camelcase #=> "HuTqUpucZ"
+      return key if key.is_a?(String) && key.start_with?("(id:")
+
       case key.to_s
       when '_key'
         'id'
