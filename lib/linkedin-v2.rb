@@ -37,6 +37,7 @@ require "linked_in/ugc_posts"
 require "linked_in/ads"
 require "linked_in/media"
 require "linked_in/profile"
+require "linked_in/webhooks"
 
 # The primary API object that makes requests.
 # It composes in all of the endpoints

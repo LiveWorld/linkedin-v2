@@ -65,7 +65,6 @@ module LinkedIn
 
     def put(path=nil, body=nil, headers=nil, &block)
       @connection.put(prepend_prefix(path), body, headers, &block)
-      Mash.from_json(response.body)
     end
 
     def delete(path=nil, body=nil, headers=nil, &block)

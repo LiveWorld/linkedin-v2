@@ -46,9 +46,12 @@ module Faraday
       return arg if arg.starts_with?("List((id:")
 
       if arg.starts_with?("List(")
-        org = arg.split('(')[1].split(')')[0]
-        org = CGI::escape(org)
-        arg = "List(#{org})"
+        # don't encode the commas in the actions arg for #webhook_notifications
+        if !arg.include?('COMMENT') && !arg.include?('ADMIN_COMMENT')
+          org = arg.split('(')[1].split(')')[0]
+          org = CGI::escape(org)
+          arg = "List(#{org})"
+        end
       end
 
       # Encode any raw URNs as required with Protocol v2 - v1 calls still work with encoded URNs, so this is backwards compatible
