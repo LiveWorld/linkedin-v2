@@ -72,7 +72,7 @@ module LinkedIn
                                               :comment,
                                               :get_share,
                                               :get_social_actions,
-                                              :delete_comment
+                                              :delete_comment,
                                               :migrate_update_keys
 
     def_delegators :@media, :summary,
@@ -87,6 +87,9 @@ module LinkedIn
 
     # V2 API Profile API - requires Protocol v2 headers
     def_delegators :@profile, :people
+
+    def_delegators :@webhooks, :subscribe_to_webhooks,
+                               :webhook_notifications
 
 
     private ##############################################################
@@ -103,6 +106,7 @@ module LinkedIn
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
       @ads = LinkedIn::Ads.new(@connection_v2)
       @profile = LinkedIn::Profile.new(@connection_v2)
+      @webhooks = LinkedIn::Webhooks.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 
@@ -115,7 +119,7 @@ module LinkedIn
 
     def default_headers
       # https://developer.linkedin.com/documents/api-requests-json
-      { "x-li-format" => "json", "Authorization" => "Bearer #{@access_token.token}" }
+      { "x-li-format" => "json", "Authorization" => "Bearer #{@access_token.token}", "Content-Type" => "application/json" }
     end
 
     def protocol_v2_headers

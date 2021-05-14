@@ -176,7 +176,7 @@ module LinkedIn
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api#migrate-from-update-keys-to-share-urns
     #
-    def migrate_update_keys update_keys
+    def migrate_update_keys(update_keys)
       path = '/activities'
       get(path, ids: update_keys)
     end
