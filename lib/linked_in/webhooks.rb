@@ -14,7 +14,7 @@ module LinkedIn
     # entity:{URL_ENCODED_ORGANIZATION_URN},
     # eventType:ORGANIZATION_SOCIAL_ACTION_NOTIFICATIONS)
 
-    def subscribe_to_webhooks(application_id, member_id, organization_id)
+    def subscribe_to_webhooks(application_id, member_id, organization_id, webhook_url)
       application_urn = CGI::escape("urn:li:developerApplication:#{application_id}")
       user_urn = CGI::escape("urn:li:person:#{member_id}")
       organization_urn = CGI::escape("urn:li:organization:#{organization_id}")
@@ -22,7 +22,7 @@ module LinkedIn
 
       path = "/eventSubscriptions/(developerApplication:#{application_urn},user:#{user_urn},entity:#{organization_urn},eventType:#{event_type})"
 
-      response = put(path, { "webhook" => "https://dlam-peyote.ngrok.io/linkedin_webhooks" }.to_json)
+      response = put(path, { "webhook" => webhook_url }.to_json)
       response&.status
     end
 
