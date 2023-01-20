@@ -119,7 +119,12 @@ module LinkedIn
 
     def default_headers
       # https://developer.linkedin.com/documents/api-requests-json
-      { "x-li-format" => "json", "Authorization" => "Bearer #{@access_token.token}", "Content-Type" => "application/json" }
+      {
+        "Linkedin-Version" => LinkedIn.config.api_version,
+        "x-li-format" => "json",
+        "Authorization" => "Bearer #{@access_token.token}",
+        "Content-Type" => "application/json"
+      }
     end
 
     def protocol_v2_headers

@@ -17,10 +17,11 @@ module LinkedIn
       # the same param to certain endpoints (like the search API).
       self.options.params_encoder = ::Faraday::FlatParamsEncoder
 
-      # Uncomment this for spammy logs - this is sometimes helpful to debug requests
+      # Uncomment these for spammy logs - this is sometimes helpful to debug requests
       # logger = Logger.new $stderr
       # logger.level = Logger::DEBUG
-      # self.response :logger, logger
+      # self.response :logger, logger, body: true, bodies: { request: true, response: true }
+      # End logging
 
       self.response :linkedin_raise_error
     end
@@ -30,7 +31,7 @@ module LinkedIn
 
 
     def default_url
-      LinkedIn.config.api + LinkedIn.config.api_version
+      LinkedIn.config.api
     end
   end
 end
