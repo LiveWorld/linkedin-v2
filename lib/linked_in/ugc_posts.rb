@@ -15,9 +15,10 @@ module LinkedIn
       get(path, options)
     end
 
+    # New Posts API: https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/posts-api?view=li-lms-2023-01&tabs=http#delete-posts
     def delete_ugc_post(options = {})
       urn = CGI.escape options.delete(:urn)
-      path = "/ugcPosts/#{urn}"
+      path = "/posts/#{urn}"
       delete(path)
     end
 
