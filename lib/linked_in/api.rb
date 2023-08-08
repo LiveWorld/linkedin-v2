@@ -91,6 +91,13 @@ module LinkedIn
     def_delegators :@webhooks, :subscribe_to_webhooks,
                                :webhook_notifications
 
+    # New Posts API
+    def_delegators :@posts, :posts,
+                            :post_by_urn,
+                            :image_by_urn,
+                            :video_by_urn,
+                            :document_by_urn
+
 
     private ##############################################################
 
@@ -107,6 +114,7 @@ module LinkedIn
       @ads = LinkedIn::Ads.new(@connection_v2)
       @profile = LinkedIn::Profile.new(@connection_v2)
       @webhooks = LinkedIn::Webhooks.new(@connection_v2)
+      @posts = LinkedIn::Posts.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 
