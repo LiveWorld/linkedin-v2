@@ -73,7 +73,8 @@ module LinkedIn
                                               :get_share,
                                               :get_social_actions,
                                               :delete_comment,
-                                              :migrate_update_keys
+                                              :migrate_update_keys,
+                                              :get_comment
 
     def_delegators :@media, :summary,
                             :upload

@@ -11,7 +11,7 @@ module LinkedIn
 
     def post_by_urn(options = {})
       urn = options.delete(:urn)
-      path = "/posts/#{CGI::escape(urn)}?viewContext=AUTHOR"
+      path = "/posts/#{CGI::escape(urn)}"
       get(path, options)
     end
 
