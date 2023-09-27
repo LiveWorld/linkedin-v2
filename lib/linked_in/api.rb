@@ -97,7 +97,10 @@ module LinkedIn
                             :post_by_urn,
                             :image_by_urn,
                             :video_by_urn,
-                            :document_by_urn
+                            :document_by_urn,
+                            :organic_post,
+                            :initialize_image_upload,
+                            :upload_image
 
 
     private ##############################################################
