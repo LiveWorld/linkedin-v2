@@ -5,7 +5,7 @@ module LinkedIn
 
     def posts(options = {})
       urn = options.delete(:urn)
-      path = "/posts?author=#{urn}&q=author"
+      path = "/posts?author=#{CGI::escape(urn)}&q=author&viewContext=AUTHOR"
       LinkedIn::APICollection.new(get(path, options), @connection)
     end
 
