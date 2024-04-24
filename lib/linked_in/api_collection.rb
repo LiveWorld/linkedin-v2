@@ -40,7 +40,8 @@ module LinkedIn
       # bail if there are no pagination links
       return unless next_page_url || previous_page_url
       # total & count may not always be present
-      total && count ? total > count : true
+      # API v202404: total is returning 0 but there is actually content
+      total && total != 0 && count ? total > count : true
     end
 
     def next_page_url

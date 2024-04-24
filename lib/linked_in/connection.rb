@@ -45,13 +45,28 @@ module Faraday
 
       # Don't encode a List of bulk people ids - see Profile#people
       return arg if arg.starts_with?("List((id:")
+      # don't encode the commas in the actions arg for #webhook_notifications
+      # List(COMMENT,ADMIN_COMMENT,COMMENT_DELETE)
+      return arg if arg.include?('COMMENT') || arg.include?('ADMIN_COMMENT')
 
       if arg.starts_with?("List(")
-        # don't encode the commas in the actions arg for #webhook_notifications
-        if !arg.include?('COMMENT') && !arg.include?('ADMIN_COMMENT')
+        # organization
+        # this might have changed to only pass in the id, not the urn?
+        if arg.include?('organization')
           org = arg.split('(')[1].split(')')[0]
           org = CGI::escape(org)
           arg = "List(#{org})"
+        elsif arg.include?('image')
+          # starting with: List(urn:li:image:C4E03AQGLvLIOvFlF6Q,urn:li:image:C4E03AQF-AtRltaJRVw)
+          # we want to return: List(urn%3Ali%3Aimage%3AC4E03AQGLvLIOvFlF6Q,urn%3Ali%3Aimage%3AC4E03AQF-AtRltaJRVw)
+          # extract the list of media ids
+          raw_media = arg.split('(')[1].split(')')[0]
+          media_list = raw_media.split(',')
+          # escape each media urn individually
+          media_list = media_list.collect{ |media| CGI::escape(media) }
+          # put the list of escaped media urns back together
+          escaped_media = media_list.join(",")
+          arg = "List(#{escaped_media})"
         end
       end
 

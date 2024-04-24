@@ -20,6 +20,11 @@ module LinkedIn
       get(path, options)
     end
 
+    def organizations_lookup(options = {})
+      ids = options.delete(:ids)
+      get("/organizationsLookup?ids=List(#{ids})", options)
+    end
+
     # Retrieve an Organization Brand
     #
     # @see https://developer.linkedin.com/docs/guide/v2/organizations/organization-lookup-api

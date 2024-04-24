@@ -23,6 +23,12 @@ module LinkedIn
       end
       @connection_v2.adapter Faraday.default_adapter
 
+      # For ads and activity to share urn conversion we need to use an older version of the API
+      @deprecated_api_connection = LinkedIn::Connection.new params: default_params, headers: custom_headers("202307") do |conn|
+        conn.request :multipart
+      end
+      @deprecated_api_connection.adapter Faraday.default_adapter
+
       initialize_endpoints
     end
 
@@ -59,7 +65,8 @@ module LinkedIn
                                     :organization_page_statistics,
                                     :organization_follower_statistics,
                                     :organization_share_statistics,
-                                    :organization_follower_count
+                                    :organization_follower_count,
+                                    :organizations_lookup
 
     def_delegators :@communications, :send_message
 
@@ -102,6 +109,10 @@ module LinkedIn
                             :initialize_image_upload,
                             :upload_image
 
+    def_delegators :@images, :batched_images
+
+    def_delegators :@deprecated_api, :migrate_update_keys
+
 
     private ##############################################################
 
@@ -109,16 +120,18 @@ module LinkedIn
       @jobs = LinkedIn::Jobs.new(@connection)
       @people = LinkedIn::People.new(@connection)
       @search = LinkedIn::Search.new(@connection)
-      @organizations = LinkedIn::Organizations.new(@connection)
+      @organizations = LinkedIn::Organizations.new(@connection_v2)
       @communications = LinkedIn::Communications.new(@connection)
       @share_and_social_stream = LinkedIn::ShareAndSocialStream.new(@connection)
       @media = LinkedIn::Media.new(@connection)
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
-      @ads = LinkedIn::Ads.new(@connection_v2)
+      @ads = LinkedIn::Ads.new(@deprecated_api_connection)
       @profile = LinkedIn::Profile.new(@connection_v2)
       @webhooks = LinkedIn::Webhooks.new(@connection_v2)
       @posts = LinkedIn::Posts.new(@connection_v2)
+      @images = LinkedIn::Images.new(@connection_v2)
+      @deprecated_api = LinkedIn::DeprecatedAPI.new(@deprecated_api_connection)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 
@@ -133,6 +146,16 @@ module LinkedIn
       # https://developer.linkedin.com/documents/api-requests-json
       {
         "Linkedin-Version" => LinkedIn.config.api_version,
+        "x-li-format" => "json",
+        "Authorization" => "Bearer #{@access_token.token}",
+        "Content-Type" => "application/json"
+      }
+    end
+
+    def custom_headers(api_version)
+      # https://developer.linkedin.com/documents/api-requests-json
+      {
+        "Linkedin-Version" => api_version,
         "x-li-format" => "json",
         "Authorization" => "Bearer #{@access_token.token}",
         "Content-Type" => "application/json"

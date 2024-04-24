@@ -159,6 +159,7 @@ module LinkedIn
       parent_comment = options.delete(:parent_comment)
 
       body = {
+        object: urn,
         actor: actor,
         message: { text: message }
       }
@@ -183,9 +184,11 @@ module LinkedIn
     #
     # https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/share-api#migrate-from-update-keys-to-share-urns
     #
-    def migrate_update_keys(update_keys)
-      path = '/activities'
-      get(path, ids: update_keys)
-    end
+    # This call is only supported up to API v202307
+    # moving to separate module to use v202307 connection
+    # def migrate_update_keys(update_keys)
+    #   path = '/activities'
+    #   get(path, ids: update_keys)
+    # end
   end
 end
