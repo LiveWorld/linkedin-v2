@@ -113,6 +113,9 @@ module LinkedIn
 
     def_delegators :@deprecated_api, :migrate_update_keys
 
+    def_delegators :@reactions, :create_reaction,
+                                :delete_reaction
+
 
     private ##############################################################
 
@@ -132,6 +135,7 @@ module LinkedIn
       @posts = LinkedIn::Posts.new(@connection_v2)
       @images = LinkedIn::Images.new(@connection_v2)
       @deprecated_api = LinkedIn::DeprecatedAPI.new(@deprecated_api_connection)
+      @reactions = LinkedIn::Reactions.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
 

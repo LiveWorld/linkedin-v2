@@ -67,12 +67,16 @@ module LinkedIn
       @connection.put(prepend_prefix(path), body, headers, &block)
     end
 
-    def delete(path=nil, body=nil, headers=nil, &block)
+    def delete(path=nil, body=nil, headers=nil, raw=false, &block)
       # @connection.delete(prepend_prefix(path), params, headers, &block)
       # To be able to DELETE with a body:
       response = @connection.run_request(:delete, prepend_prefix(path), body, headers, &block)
 
-      Mash.from_json(response.body)
+      if !raw
+        Mash.from_json(response.body)
+      else
+        response
+      end
     end
 
     def deprecated

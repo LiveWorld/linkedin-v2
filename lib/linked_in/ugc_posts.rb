@@ -19,7 +19,7 @@ module LinkedIn
     def delete_ugc_post(options = {})
       urn = CGI.escape options.delete(:urn)
       path = "/posts/#{urn}"
-      delete(path)
+      delete(path, nil, nil)
     end
 
   end
