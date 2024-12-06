@@ -29,6 +29,13 @@ module LinkedIn
       end
       @deprecated_api_connection.adapter Faraday.default_adapter
 
+      # for unversioned /v2 endpoints
+      @deprecated_api_v2_connection = LinkedIn::Connection.new url: LinkedIn.config.v2_api, params: default_params, headers: default_headers do |conn|
+        conn.request :multipart
+      end
+      @deprecated_api_v2_connection.adapter Faraday.default_adapter
+
+
       initialize_endpoints
     end
 
@@ -129,12 +136,14 @@ module LinkedIn
       @media = LinkedIn::Media.new(@connection)
       # UGCPosts requires Protocol v2
       @ugc_posts = LinkedIn::UGCPosts.new(@connection_v2)
+      # The Ads endpoint will be deprecated on 12/16/2024 (it's using v202307)
       @ads = LinkedIn::Ads.new(@deprecated_api_connection)
       @profile = LinkedIn::Profile.new(@connection_v2)
       @webhooks = LinkedIn::Webhooks.new(@connection_v2)
       @posts = LinkedIn::Posts.new(@connection_v2)
       @images = LinkedIn::Images.new(@connection_v2)
-      @deprecated_api = LinkedIn::DeprecatedAPI.new(@deprecated_api_connection)
+      # This is using the old v2, nonversioned API which will be sunset sometime... no timeline
+      @deprecated_api = LinkedIn::DeprecatedAPI.new(@deprecated_api_v2_connection)
       @reactions = LinkedIn::Reactions.new(@connection_v2)
       # @groups = LinkedIn::Groups.new(@connection) not supported by v2 API?
     end
