@@ -43,4 +43,8 @@ describe "LinkedIn configuration" do
   it("has the correct default authorize_url") do
     expect(subject.authorize_url).to eq authorize_url
   end
+
+  it("has the correct default api_version") do
+    expect(subject.api_version).to eq "202610"
+  end
 end
