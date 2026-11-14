@@ -1,4 +1,5 @@
 require "oauth2"
+require "multi_json"
 
 require "linked_in/errors"
 require "linked_in/raise_error"
